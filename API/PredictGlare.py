@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests as request;
-import datetime;
+from datetime import datetime,timezone;
 from dateutil import tz;
 import astropy.coordinates as coord;
 from astropy.time import Time;
@@ -22,9 +22,9 @@ class predict_glare:
         return (dict(response.json())["zoneName"])
 
     def get_localtime(self, epoch_time, tz1):
-        datetime_time_utc = datetime.datetime.utcfromtimestamp(epoch_time);
+        datetime_time_utc = datetime.utcfromtimestamp(epoch_time);
         to_zone = tz.gettz(str(tz1));
-        local_input = datetime_time_utc.astimezone(to_zone);
+        local_input = datetime_time_utc.replace(tzinfo=timezone.utc).astimezone(tz=to_zone)
         return (local_input);
 
     def get_car_azimuth(self, orientation):
